@@ -1,5 +1,8 @@
 #!/bin/bash
 
+function isCMDRunning(){
+	$(ps aux | grep "$1" | grep -v "grep" | wc -l) -eg "0"
+}
 
 function createTunnel() {
 	remoteURL=$1
@@ -13,7 +16,10 @@ function createTunnel() {
 		cmd="$cmd $sshUser@"
 	fi
 	cmd="$cmd$remoteURL" 
-	echo $cmd
+	if [[ $( isCMDRunning "$cmd" ) -ne "0" ]]; then
+		exit 2
+	fi
+
 	eval "$cmd"
 	if [[ $? -eq 0 ]]; then
 		echo Tunnel to jumpbox created successfully
