@@ -27,7 +27,13 @@ function createTunnel() {
 #  createTunnel
 #fi
 
-if [ "${1}" != "create" ]; then
+if [ "${1}" == "create" ]; then
+	if [[ ! -e  "config/config.sh" ]]; then
+		mkdir config
+		cp config_example.sh config/config.sh
+		echo Please configure 'config/config.sh'
+		exit 1
+	fi
 	. config/config.sh
 	createTunnel REMOTE_URL REMOTE_PORT LOCAL_PORT REMOTE_USER
 fi
