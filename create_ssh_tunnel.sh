@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function isCMDRunning(){
-	$(ps aux | grep "$1" | grep -v "grep" | wc -l) -eg "0"
+	ps aux | grep "$1" | grep -v "grep" | wc -l
 }
 
 function createTunnel() {
@@ -9,7 +9,7 @@ function createTunnel() {
 	remotePort=$2
 	localPort=$3
 	sshUser=$4
-	cmd="ssh -N -R $remoteURL:$remotePort:localhost:$localPort "
+	cmd="ssh -N -f -R $remoteURL:$remotePort:localhost:$localPort "
 	
 	if [[ ! -z "$4" ]];
 	then
@@ -41,5 +41,5 @@ if [ "${1}" == "create" ]; then
 		exit 1
 	fi
 	. config/config.sh
-	createTunnel REMOTE_URL REMOTE_PORT LOCAL_PORT REMOTE_USER
+	createTunnel $REMOTE_URL $REMOTE_PORT $LOCAL_PORT $REMOTE_USER
 fi
