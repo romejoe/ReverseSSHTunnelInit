@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function isCMDRunning(){
-	ps aux | grep "$1" | grep -v "grep" | wc -l
+	result=`ps aux | grep "$1" | grep -v "grep" | wc -l`
 }
 
 function createTunnel() {
@@ -13,10 +13,14 @@ function createTunnel() {
 	
 	if [[ ! -z "$4" ]];
 	then
-		cmd="$cmd $sshUser@"
+		cmd="$cmd$sshUser@"
 	fi
 	cmd="$cmd$remoteURL" 
-	if [[ $( isCMDRunning "$cmd" ) -ne "0" ]]; then
+	isCMDRunning "$cmd"
+	echo $result
+
+	if [[ $result -ne "0" ]]; then
+		echo Tunnel already running
 		exit 2
 	fi
 
